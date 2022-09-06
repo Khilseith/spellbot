@@ -54,7 +54,7 @@ class Roll(commands.Cog):
                 description="""
                 Number of dice must be a number 1 - 10.
                 The Die/Dice can have 1-100 sides.
-                The Modifier and the DC have to be between -500 and 500. """,
+                The Modifier and the Goal have to be between -500 and 500. """,
                 color=0xFF1100,
             )
             await interaction.response.send_message(embed=em, ephemeral=True)
