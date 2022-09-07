@@ -206,7 +206,7 @@ class Spell(commands.Cog):
             if number == 0:
                 await interaction.response.send_message(embed=embed)
                 continue
-            await (await interaction.original_response()).channel.send(embed=embed)
+            await interaction.followup.send(embed=embed)
 
     @sd.autocomplete("spell")
     async def sd_autocomplete(
@@ -284,7 +284,7 @@ class Spell(commands.Cog):
             if number == 0:
                 await interaction.response.send_message(embed=embed)
                 continue
-            await (await interaction.original_response()).channel.send(embed=embed)
+            await interaction.followup.send(embed=embed)
 
     @spells.autocomplete("spellclass")
     async def spellclass_autocomplete(
