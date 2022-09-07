@@ -13,7 +13,9 @@ class Roll(commands.Cog):
     def __init__(self, client: commands.Bot) -> None:
         self.client = client
 
-    @app_commands.command(name="rolldice")
+    @app_commands.command(
+        name="complexroll", description="Intricately orchestrate a new roll"
+    )
     async def roll(self, interaction: discord.Interaction):
         view = RollBuilder(OrderedDict())
         embed = discord.Embed(
@@ -25,7 +27,7 @@ class Roll(commands.Cog):
         )
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
-    @app_commands.command(name="quickroll", description="Quickly Roll Some Dice")
+    @app_commands.command(name="roll", description="Quickly Roll Some Dice")
     @app_commands.describe(
         ammount="# of dice",
         sides="# of sides on the dice",
