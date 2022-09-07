@@ -201,8 +201,12 @@ class Spell(commands.Cog):
             return
 
         embed, pieces = self.create_spell_embed(foundSpell)
-        for embed in self.create_embed_queue(embed, pieces):
-            await interaction.response.send_message(embed=embed)
+
+        for number, embed in enumerate(self.create_embed_queue(embed, pieces)):
+            if number == 0:
+                await interaction.response.send_message(embed=embed)
+                continue
+            await (await interaction.original_response()).channel.send(embed=embed)
 
     @sd.autocomplete("spell")
     async def sd_autocomplete(
@@ -276,8 +280,11 @@ class Spell(commands.Cog):
         embed.title = f"{len(listOfSpells)} Spells Found!"
         embed.color = 0xAC26EB
 
-        for embed in self.create_embed_queue(embed, pieces):
-            await interaction.response.send_message(embed=embed)
+        for number, embed in enumerate(self.create_embed_queue(embed, pieces)):
+            if number == 0:
+                await interaction.response.send_message(embed=embed)
+                continue
+            await (await interaction.original_response()).channel.send(embed=embed)
 
     @spells.autocomplete("spellclass")
     async def spellclass_autocomplete(
