@@ -38,6 +38,28 @@ $ pip install -r requirements.txt
 $ deactivate
 ```
 
+### Running the bot
+
+#### Lavalink
+For music support you are going to need to download and run Lavalink before starting the bot
+For more on Lavalink go to their official repo [here](https://github.com/freyacodes/Lavalink)
+Make sure to add the application.yml in the root directory, it should look something like [this](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example/)
+
+#### Bot token
+Before you run the bot you need to create a file called .env in the root directory.
+In this file you need to add your bot's token, the file should look like this
+```env
+TOKEN="Whatever your token is"
+```
+
+#### Running the bot
+```shell
+# Linux
+python3.10 ./src/main.py
+# Windows
+> py -3.10 .\src\main.py
+```
+
 ### Before you commit
 
 #### Sort your imports
