@@ -20,6 +20,9 @@ def get_prefix(_, message: Message) -> str:
         prefixes = json.load(f)["prefixes"]
 
     if message.guild:
-        return prefixes[str(message.guild.id)]
+        try:
+            return prefixes[str(message.guild.id)]
+        except KeyError:
+            return "supersecretstringorsomething"
     else:
         return "s!"
