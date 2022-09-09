@@ -18,6 +18,7 @@ class MyClient(commands.Bot):
     async def sync(self) -> None:
         self.tree.copy_global_to(guild=MY_GUILD)
         await self.tree.sync(guild=MY_GUILD)
+        await self.tree.sync()
 
     async def setup_hook(self) -> None:
         for extension in os.listdir("./src/cogs"):
