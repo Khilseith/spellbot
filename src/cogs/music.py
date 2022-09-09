@@ -119,12 +119,12 @@ class Music(commands.Cog):
             # When this track_hook receives a "QueueEndEvent" from lavalink.py
             # it indicates that there are no tracks left in the player's queue.
             # To save on resources, we can tell the bot to disconnect from the voicechannel.
-            event.player.repeat = False
-            event.player.shuffle = False
+            event.player.set_loop(0)
+            event.player.set_shuffle(False)
             guild_id = int(event.player.guild_id)
             guild = self.client.get_guild(guild_id)
-            if guild:
-                await guild.change_voice_state(channel=None)
+            if guild and guild.voice_client:
+                await guild.voice_client.disconnect(force=True)
 
     async def ensure_voice(self, interaction: discord.Interaction):
         """This check ensures that the bot and command author are in the same voicechannel."""
@@ -288,7 +288,7 @@ class Music(commands.Cog):
         if player.shuffle:
             shuffle = "✔"
         if player.repeat:
-            repeat = "queue" if player.repeat == 2 else "single track"
+            repeat = "queue" if player.repeat == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
         if not player.repeat:
@@ -457,7 +457,7 @@ class Music(commands.Cog):
         if player.shuffle:
             shuffle = "✔"
         if player.repeat:
-            repeat = "queue" if player.repeat == 2 else "single track"
+            repeat = "queue" if player.repeat == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
         if not player.repeat:
