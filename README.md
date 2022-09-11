@@ -44,6 +44,7 @@ $ deactivate
 For music support you are going to need to download and run Lavalink before starting the bot
 For more on Lavalink go to their official repo [here](https://github.com/freyacodes/Lavalink)
 Make sure to add the application.yml in the root directory, it should look something like [this](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example/)
+However the password currently in the bot is `Th3Pa$$wordToPa$$Th!s!` so you may need to change that in the application.yml
 
 #### Bot token
 Before you run the bot you need to create a file called .env in the root directory.
