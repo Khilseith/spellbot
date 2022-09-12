@@ -184,7 +184,7 @@ class Music(commands.Cog):
             query = f"ytsearch:{query}"
 
         # Get the results for the query from Lavalink.
-        results = await player.node.get_tracks(query)
+        results: lavalink.LoadResult = await player.node.get_tracks(query)
 
         # Results could be None if Lavalink returns an invalid response (non-JSON/non-200 (OK)).
         # ALternatively, resullts.tracks could be an empty array if the query yielded no tracks.
@@ -209,7 +209,9 @@ class Music(commands.Cog):
                 player.add(requester=interaction.user.id, track=track)
 
             embed.title = "Playlist Enqueued!"
-            embed.description = f"{results.playlist_info.name} - {len(tracks)} tracks"
+            embed.description = (
+                f"[{results.playlist_info.name}]({query}) - {len(tracks)} tracks"
+            )
         else:
             track: lavalink.AudioTrack = results.tracks[0]
             embed.title = "Track Enqueued"
@@ -220,7 +222,7 @@ class Music(commands.Cog):
             )
 
             embed.add_field(name="Length:", value=tracklength, inline=False)
-            embed.add_field(name="Author:", value=track["info"]["author"], inline=False)
+            embed.add_field(name="Author:", value=track.author, inline=False)
 
             player.add(requester=interaction.user.id, track=track)
 
