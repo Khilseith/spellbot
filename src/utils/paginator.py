@@ -7,7 +7,9 @@ class Paginator(discord.ui.View):
         self.pages = pages
         self.page = 0
 
-    @discord.ui.button(label="<-", style=discord.ButtonStyle.primary)
+    @discord.ui.button(
+        label="<-", custom_id="left", style=discord.ButtonStyle.primary, disabled=True
+    )
     async def button_left(
         self,
         interaction: discord.Interaction,
@@ -20,11 +22,23 @@ class Paginator(discord.ui.View):
             self.page -= 1
 
         if self.page != pervious_page:
-            await interaction.response.edit_message(embed=self.pages[self.page])
-        else:
-            await interaction.response.defer()
+            for child in self.children:
+                if not isinstance(child, discord.ui.Button):
+                    continue
 
-    @discord.ui.button(label="->", style=discord.ButtonStyle.primary)
+                match child.custom_id:
+                    case "left":
+                        child.disabled = self.page == 0
+                    case "right":
+                        child.disabled = self.page == len(self.pages) - 1
+
+            return await interaction.response.edit_message(
+                embed=self.pages[self.page], view=self
+            )
+
+        return await interaction.response.defer()
+
+    @discord.ui.button(label="->", custom_id="right", style=discord.ButtonStyle.primary)
     async def button_right(
         self, interaction: discord.Interaction, _: discord.ui.Button
     ):
@@ -34,6 +48,18 @@ class Paginator(discord.ui.View):
             self.page += 1
 
         if self.page != pervious_page:
-            await interaction.response.edit_message(embed=self.pages[self.page])
-        else:
-            await interaction.response.defer()
+            for child in self.children:
+                if not isinstance(child, discord.ui.Button):
+                    continue
+
+                match child.custom_id:
+                    case "left":
+                        child.disabled = self.page == 0
+                    case "right":
+                        child.disabled = self.page == len(self.pages) - 1
+
+            return await interaction.response.edit_message(
+                embed=self.pages[self.page], view=self
+            )
+
+        return await interaction.response.defer()
