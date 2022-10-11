@@ -50,8 +50,13 @@ class LavalinkVoiceClient(discord.VoiceClient):
         # voice_update_handler
         lavalink_data = {"t": "VOICE_STATE_UPDATE", "d": data}
         await self.lavalink.voice_update_handler(lavalink_data)
-        if data["channel_id"] is None:
+
+        channel_id = data["channel_id"]
+
+        if channel_id is None:
             self.destroy_me = True
+        elif channel_id != self.channel.id:
+            self.channel = self.client.get_channel(int(channel_id))  # type: ignore
 
     async def connect(
         self,
