@@ -664,10 +664,10 @@ class Music(commands.Cog):
         ]
 
     async def cog_app_command_error(self, interaction: discord.Interaction, error):
-        if isinstance(error, MusicError):
-            await interaction.response.send_message(str(error), ephemeral=True)
-        else:
-            raise error
+        if isinstance(error, app_commands.CommandInvokeError):
+            if isinstance(error.original, MusicError):
+                return await interaction.response.send_message(str(error.original), ephemeral=True)
+        raise error
 
 
 async def setup(bot: commands.Bot) -> None:
