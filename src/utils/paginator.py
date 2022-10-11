@@ -70,6 +70,11 @@ class Paginator(discord.ui.View):
             embed=self.pages[self.page], view=self
         )
 
+    @discord.ui.button(emoji="\N{wastebasket}", style=discord.ButtonStyle.danger)
+    async def trash_button(self, interaction: discord.Interaction, _: discord.ui.Button):
+        self.stop()
+        return await interaction.response.edit_message(view=None)
+
     def update_button_status(self):
         for child in self.children:
             if not isinstance(child, discord.ui.Button):
