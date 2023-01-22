@@ -16,7 +16,7 @@ $ python -m venv .venv
 # Linux, Fish
 $ source .venv/bin/activate.fish
 # Windows, cmd.exe
-> .venv\Scripts\activate.bash
+> .venv\Scripts\activate.bat
 # Windows, PowerShell
 > .venv\Scripts\activate.ps1
 ```
