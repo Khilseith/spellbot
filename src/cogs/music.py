@@ -55,6 +55,7 @@ class LavalinkVoiceClient(discord.VoiceClient):
 
         if channel_id is None:
             self.destroy_me = True
+            await self.disconnect()
         elif channel_id != self.channel.id:
             self.channel = self.client.get_channel(int(channel_id))  # type: ignore
 
