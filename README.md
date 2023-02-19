@@ -56,9 +56,9 @@ TOKEN="Whatever your token is"
 #### Running the bot
 ```shell
 # Linux
-python3.10 ./src/main.py
+python3.11 ./src/main.py
 # Windows
-> py -3.10 .\src\main.py
+> py -3.11 .\src\main.py
 ```
 
 ### Before you commit
