@@ -64,7 +64,7 @@ PARAMATERS = [
 class Die:
     def __init__(
         self,
-        ammount: int,
+        amount: int,
         sides: int,
         type: str | None = None,
         keep: KeepType | None = None,
@@ -75,7 +75,7 @@ class Die:
         max: int | None = None,
         reroll: Reroll | None = None,
     ):
-        self.ammount = ammount
+        self.amount = amount
         self.sides = sides
         self.type = type
         self.keep = keep
@@ -157,7 +157,7 @@ class Die:
         max = f"ma{self.max}" if self.max is not None else ""
         type = f"[{self.type}]" if self.type else ""
 
-        return f"{negate}({self.ammount}d{self.sides}{min}{max}{reroll}{keep}{modifier}){multiplyDivide}{type}"
+        return f"{negate}({self.amount}d{self.sides}{min}{max}{reroll}{keep}{modifier}){multiplyDivide}{type}"
 
 
 class Dice:
@@ -292,7 +292,7 @@ class DiceSelector(ui.Select["RollBuilder"]):
         if self.values[0] == "New":
             self.disable_enable_buttons(True)
 
-            # Prompt the user to pick sides and ammount and if they don't defer
+            # Prompt the user to pick sides and amount and if they don't defer
             oldLength = len(self.view.dice)
             modal = NewDieModal(self.view)
             await interaction.response.send_modal(modal)
@@ -355,7 +355,7 @@ class NewDieModal(ui.Modal, title="New Die"):
         super().__init__()
         self.view = view
 
-    ammount = discord.ui.TextInput(
+    amount = discord.ui.TextInput(
         label="# of dice",
         default="1",
         min_length=1,
@@ -375,14 +375,14 @@ class NewDieModal(ui.Modal, title="New Die"):
     async def on_submit(self, interaction: discord.Interaction) -> None:
         # Verify ints were submitted
         sides = int(self.sides.value)
-        ammount = int(self.ammount.value)
+        amount = int(self.amount.value)
 
-        dieLabel = f"{ammount}d{sides}"
+        dieLabel = f"{amount}d{sides}"
         # Prevent conflicts
         if self.view.dice.get(dieLabel) is not None:
             return await interaction.response.send_message(f"{dieLabel} already exists")
 
-        self.view.dice[dieLabel] = Die(ammount, sides)
+        self.view.dice[dieLabel] = Die(amount, sides)
         await interaction.response.defer()
 
     async def on_error(
@@ -423,7 +423,7 @@ class MinMaxModal(ui.Modal, title="Set the Min/Max"):
         min = self.min.value
         max = self.max.value
 
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         if min:
             min = int(min)
@@ -458,7 +458,7 @@ class TypeModal(ui.Modal, title="Set the damage type of the die"):
     async def on_submit(self, interaction: discord.Interaction):
         type = self.type.value
 
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         self.view.dice[dieLabel].type = type.replace("]", "").replace("[", "")
         await interaction.response.defer()
@@ -486,7 +486,7 @@ class NegateModal(ui.Modal, title="Negate the result of the die?"):
         else:
             raise ValueError()
 
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         self.view.dice[dieLabel].negate = negate
         await interaction.response.defer()
@@ -521,7 +521,7 @@ class ModifierModal(ui.Modal, title="Set the modifier of the die"):
     async def on_submit(self, interaction: discord.Interaction) -> None:
         modifier = int(self.modifier.value)
 
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         self.view.dice[dieLabel].modifier = modifier
         await interaction.response.defer()
@@ -588,7 +588,7 @@ class KeepModal(ui.Modal, title="What dice to keep"):
 
         number = int(self.number.value)
 
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
         keep = KeepType(
             type=selector.value,
             number=number,
@@ -658,7 +658,7 @@ class RerollModal(ui.Modal, title="What to ReRoll on"):
             return
 
         number = int(self.number.value)
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         reroll = Reroll(type=selector.value, when=rerollOn.value, number=number)
         self.view.dice[dieLabel].reroll = reroll
@@ -707,7 +707,7 @@ class MultiplyDivideModal(ui.Modal, title="Multiply or Divide"):
                 ephemeral=True,
             )
             return
-        dieLabel = f"{self.die.ammount}d{self.die.sides}"
+        dieLabel = f"{self.die.amount}d{self.die.sides}"
         multiplyOrDivide = MultiplyDivide(
             value=number, multiplyOrDivide=multiplyDivide.value
         )

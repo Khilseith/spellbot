@@ -29,7 +29,7 @@ class Roll(commands.Cog):
 
     @app_commands.command(name="quickroll", description="Quickly Roll Some Dice")
     @app_commands.describe(
-        ammount="# of dice",
+        amount="# of dice",
         sides="# of sides on the dice",
         modifier="Number to add/subract to total",
         goal="Number to try to beat",
@@ -37,18 +37,18 @@ class Roll(commands.Cog):
     async def qroll(
         self,
         interaction: discord.Interaction,
-        ammount: app_commands.Range[int, 1, 10],
+        amount: app_commands.Range[int, 1, 10],
         sides: app_commands.Range[int, 1, 100],
         modifier: app_commands.Range[int, -500, 500] = 0,
         goal: int = 0,
     ):
 
         # Create the roll
-        r = roll(f"{ammount}d{sides} + {modifier}")
+        r = roll(f"{amount}d{sides} + {modifier}")
 
         # Get raw dice rolls
         rolls = str(r)
-        rolls = rolls.replace(f"{ammount}d{sides} (", "").replace(
+        rolls = rolls.replace(f"{amount}d{sides} (", "").replace(
             f") + {modifier} = `{str(r.total)}`", ""
         )
 
@@ -68,7 +68,7 @@ class Roll(commands.Cog):
 
         # Create Embed
         embed = discord.Embed(
-            title="Rolling...", description=f"Rolling {ammount}d{sides}{m}"
+            title="Rolling...", description=f"Rolling {amount}d{sides}{m}"
         )
         await interaction.response.send_message(embed=embed)
 
@@ -111,7 +111,7 @@ class Roll(commands.Cog):
         if modifier != 0:
             embed.add_field(name="Modifier:", value=str(modifier))
 
-        if int(ammount) != 1 or modifier != 0:
+        if int(amount) != 1 or modifier != 0:
             embed.add_field(name="Total:", value=total)
 
         await asyncio.sleep(1)

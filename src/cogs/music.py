@@ -310,7 +310,7 @@ class Music(commands.Cog):
             def round_up_nearest(a, b):
                 return a + b - (a % b) if a % b else a
 
-            # rounds the ammount of songs up to a multiple of 10
+            # rounds the amount of songs up to a multiple of 10
             times = round_up_nearest(len(q), 10)
 
             times = times // 10  # divides it by 10 telling us how many pages we need
