@@ -210,7 +210,6 @@ class Spell(commands.Cog):
     async def sd_autocomplete(
         self, _: discord.Interaction, current: str
     ) -> list[app_commands.Choice[str]]:
-
         with open("spells2.json") as f:
             f = json.load(f)
 
@@ -286,7 +285,6 @@ class Spell(commands.Cog):
     async def spellclass_autocomplete(
         self, _: discord.Interaction, current: str
     ) -> list[app_commands.Choice[str]]:
-
         classes = [
             "Artificer",
             "Warlock",
@@ -317,7 +315,6 @@ class Spell(commands.Cog):
     async def type_autocomplete(
         self, _: discord.Interaction, current: str
     ) -> list[app_commands.Choice[str]]:
-
         spellTypes = [
             "Evocation",
             "Abjuration",

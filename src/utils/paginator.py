@@ -27,7 +27,6 @@ class Paginator(discord.ui.View):
         interaction: discord.Interaction,
         _: discord.ui.Button,
     ):
-
         pervious_page = self.page
 
         if self.page > 0:
@@ -71,7 +70,9 @@ class Paginator(discord.ui.View):
         )
 
     @discord.ui.button(emoji="\N{wastebasket}", style=discord.ButtonStyle.danger)
-    async def trash_button(self, interaction: discord.Interaction, _: discord.ui.Button):
+    async def trash_button(
+        self, interaction: discord.Interaction, _: discord.ui.Button
+    ):
         self.stop()
         return await interaction.response.edit_message(view=None)
 

@@ -303,7 +303,6 @@ class Music(commands.Cog):
             repeat = "❌"
         # check if pagination is required
         if len(q) > 10:
-
             embeds = []
 
             # func that checks if 'a' is a multiple of b if not rounds up to the nearest
@@ -317,7 +316,6 @@ class Music(commands.Cog):
 
             tracknum = 0  # tracks what track we are on
             for x, _ in enumerate(range(times)):  # for the pages we need create pages
-
                 # create the page template
                 embed = discord.Embed(title="Queue", color=discord.Color.blurple())
                 embed.set_footer(
@@ -327,7 +325,6 @@ class Music(commands.Cog):
                 for y, track in enumerate(
                     q[10 * x :]  # flake8: ignore
                 ):  # create the page slicing out the songs already added
-
                     tracknum += 1
 
                     # Check if it is live
@@ -351,11 +348,9 @@ class Music(commands.Cog):
             )  # send page 1
 
         else:  # no paganation queue
-
             embed = discord.Embed(title="Queue")  # make embed
 
             if q != []:  # if queue not empty
-
                 embed.color = discord.Color.blurple()
 
                 for x, track in enumerate(q):  # loop for each track
@@ -667,7 +662,9 @@ class Music(commands.Cog):
     async def cog_app_command_error(self, interaction: discord.Interaction, error):
         if isinstance(error, app_commands.CommandInvokeError):
             if isinstance(error.original, MusicError):
-                return await interaction.response.send_message(str(error.original), ephemeral=True)
+                return await interaction.response.send_message(
+                    str(error.original), ephemeral=True
+                )
         raise error
 
 

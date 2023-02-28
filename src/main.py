@@ -114,7 +114,6 @@ async def reload(ctx: commands.Context, extension: str):
 
 
 if __name__ == "__main__":
-
     load_dotenv()
     token = os.getenv("TOKEN")
     if token is None:

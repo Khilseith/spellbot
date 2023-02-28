@@ -42,7 +42,6 @@ class Roll(commands.Cog):
         modifier: app_commands.Range[int, -500, 500] = 0,
         goal: int = 0,
     ):
-
         # Create the roll
         r = roll(f"{amount}d{sides} + {modifier}")
 

@@ -87,7 +87,6 @@ class Die:
         self.reroll = reroll
 
     def __str__(self):
-
         reroll: str = ""
         if self.reroll is not None:
             match RerollOn(self.reroll.when):
@@ -396,7 +395,6 @@ class NewDieModal(ui.Modal, title="New Die"):
 
 class MinMaxModal(ui.Modal, title="Set the Min/Max"):
     def __init__(self, view: RollBuilder):
-
         super().__init__()
         self.view = view
         die = view.getCurrentDie()
@@ -568,7 +566,6 @@ class KeepModal(ui.Modal, title="What dice to keep"):
     )
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
-
         try:
             selector = Selectors(self.selector.value.lower())
         except ValueError:
