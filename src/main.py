@@ -85,8 +85,8 @@ async def unload(ctx: commands.Context, extension: str):
         )
         if ctx.guild and ctx.guild.id == MY_GUILD.id:
             embed.add_field(name="Error", value=f"```{err}```")
-        await ctx.send(embed=embed)
         traceback.print_tb(err.__traceback__)
+    await ctx.send(embed=embed)
 
 
 @commands.is_owner()
