@@ -89,16 +89,16 @@ class LavalinkVoiceClient(discord.VoiceClient):
             return
 
         # no need to disconnect if we are not connected
-        if not force and not player.is_connected:
+        if not force and not player.is_connected:  # type: ignore
             return
 
         # None means disconnect
         await self.channel.guild.change_voice_state(channel=None)
-        player.queue.clear()
-        player.set_loop(0)
-        player.set_shuffle(False)
+        player.queue.clear()  # type: ignore
+        player.set_loop(0)  # type: ignore
+        player.set_shuffle(False)  # type: ignore
         # Stop the current track so Lavalink consumes less resources.
-        await player.stop()
+        await player.stop()  # type: ignore
         # update the channel_id of the player to None
         # this must be done because the on_voice_state_update that would set channel_id
         # to None doesn't get dispatched after the disconnect
@@ -125,8 +125,8 @@ class Music(commands.Cog):
             # When this track_hook receives a "QueueEndEvent" from lavalink.py
             # it indicates that there are no tracks left in the player's queue.
             # To save on resources, we can tell the bot to disconnect from the voicechannel.
-            event.player.set_loop(0)
-            event.player.set_shuffle(False)
+            event.player.set_loop(0)  # type: ignore
+            event.player.set_shuffle(False)  # type: ignore
             guild_id = int(event.player.guild_id)
             guild = self.client.get_guild(guild_id)
             if guild and guild.voice_client:
@@ -238,6 +238,25 @@ class Music(commands.Cog):
         # the current track.
         if not player.is_playing:
             await player.play()
+
+    @play.autocomplete(name="query")
+    async def play_autocomplete(
+            self, interaction: discord.Interaction, current: str  # type: ignore
+    ) -> list[app_commands.Choice[str]]:
+        if len(current) == 0:
+            return []
+        if url_rx.match(current):
+            return []
+        else:
+            current = f"ytsearch:{current}"
+
+        player = self.client.lavalink.player_manager.get(interaction.guild.id)  # type: ignore
+        if not player:
+            return []
+
+        results: lavalink.LoadResult = await player.node.get_tracks(current)
+
+        return [app_commands.Choice(name=track.title, value=track.uri) for track in results.tracks[:5]]
 
     @app_commands.command(
         name="disconnect",
