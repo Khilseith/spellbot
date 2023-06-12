@@ -241,7 +241,7 @@ class Music(commands.Cog):
 
     @play.autocomplete(name="query")
     async def play_autocomplete(
-            self, interaction: discord.Interaction, current: str  # type: ignore
+        self, interaction: discord.Interaction, current: str  # type: ignore
     ) -> list[app_commands.Choice[str]]:
         if len(current) == 0:
             return []
@@ -256,7 +256,10 @@ class Music(commands.Cog):
 
         results: lavalink.LoadResult = await player.node.get_tracks(current)
 
-        return [app_commands.Choice(name=track.title, value=track.uri) for track in results.tracks[:5]]
+        return [
+            app_commands.Choice(name=track.title, value=track.uri)
+            for track in results.tracks[:5]
+        ]
 
     @app_commands.command(
         name="disconnect",
@@ -315,7 +318,7 @@ class Music(commands.Cog):
         if player.shuffle:
             shuffle = "✔"
         if player.repeat:
-            repeat = "queue" if player.repeat == 2 else "song"
+            repeat = "queue" if player.loop == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
         if not player.repeat:
@@ -479,7 +482,7 @@ class Music(commands.Cog):
         if player.shuffle:
             shuffle = "✔"
         if player.repeat:
-            repeat = "queue" if player.repeat == 2 else "song"
+            repeat = "queue" if player.loop == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
         if not player.repeat:
