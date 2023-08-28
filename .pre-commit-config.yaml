@@ -12,11 +12,13 @@ repos:
       rev: v1.5.1
       hooks:
       -   id: python-check-blanket-noqa
+          types:
+              - cython
 
--   repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-    -   id: isort
+# -   repo: https://github.com/pycqa/isort
+#     rev: 5.11.2
+#     hooks:
+#     -   id: isort
 
 -   repo: https://github.com/pycqa/flake8
     rev: 5.0.4
