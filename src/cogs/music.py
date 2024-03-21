@@ -113,12 +113,11 @@ class Music(commands.Cog):
         if not hasattr(client, "lavalink"):
             setattr(client, "lavalink", lavalink.Client(client.user.id))  # type: ignore
             # Host, Port, Password, Region, Name
-            clientLavalink = getattr(client, "lavalink")
+            clientLavalink: lavalink.Client = getattr(client, "lavalink")
             clientLavalink.add_node(
                 "localhost", 2333, "Th3Pa$$wordToPa$$Th!s!", "us", "default-node"
             )
-
-        lavalink.add_event_hook(self.track_hook)
+            clientLavalink.add_event_hook(self.track_hook)  # type: ignore
 
     async def track_hook(self, event):
         if isinstance(event, lavalink.events.QueueEndEvent):
@@ -203,11 +202,12 @@ class Music(commands.Cog):
 
         # Valid loadTypes are:
         #   TRACK_LOADED    - single video/direct URL)
-        #   PLAYLIST_LOADED - direct URL to playlist)
+        #   PLAYLIST - direct URL to playlist)
         #   SEARCH_RESULT   - query prefixed with either ytsearch: or scsearch:.
         #   NO_MATCHES      - query yielded no results
         #   LOAD_FAILED     - most likely, the video encountered an exception during loading.
-        if results.load_type == "PLAYLIST_LOADED":
+
+        if lavalink.LoadType(results.load_type) == lavalink.LoadType.PLAYLIST:
             tracks = results.tracks
 
             for track in tracks:
