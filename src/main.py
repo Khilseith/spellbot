@@ -119,5 +119,4 @@ if __name__ == "__main__":
     if token is None:
         print("No Token Found In The .env")
         exit()
-
     client.run(token)

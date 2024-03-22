@@ -35,7 +35,11 @@ class LavalinkVoiceClient(discord.VoiceClient):
         else:
             self.client.lavalink = lavalink.Client(client.user.id)  # type: ignore
             self.client.lavalink.add_node(  # type: ignore
-                "localhost", 2333, "Th3Pa$$wordToPa$$Th!s!", "us", "default-node"
+                host="lavalink",
+                port=2333,
+                password="youshallnotpass",
+                region="us",
+                name="default-node",
             )
             self.lavalink = self.client.lavalink  # type: ignore
 
@@ -115,7 +119,7 @@ class Music(commands.Cog):
             # Host, Port, Password, Region, Name
             clientLavalink: lavalink.Client = getattr(client, "lavalink")
             clientLavalink.add_node(
-                "localhost", 2333, "Th3Pa$$wordToPa$$Th!s!", "us", "default-node"
+                "lavalink", 2333, "youshallnotpass", "us", "default-node"
             )
             clientLavalink.add_event_hook(self.track_hook)  # type: ignore
 
