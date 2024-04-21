@@ -321,11 +321,11 @@ class Music(commands.Cog):
         # check shuffle/loop status
         if player.shuffle:
             shuffle = "✔"
-        if player.repeat:
+        if player.loop:
             repeat = "queue" if player.loop == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
-        if not player.repeat:
+        if not player.loop:
             repeat = "❌"
         # check if pagination is required
         if len(q) > 10:
@@ -485,11 +485,11 @@ class Music(commands.Cog):
         # check shuffle/loop status
         if player.shuffle:
             shuffle = "✔"
-        if player.repeat:
+        if player.loop:
             repeat = "queue" if player.loop == 2 else "song"
         if not player.shuffle:
             shuffle = "❌"
-        if not player.repeat:
+        if not player.loop:
             repeat = "❌"
 
         embed.set_footer(text=f"Shuffle: {shuffle} Loop: {repeat}")  # type: ignore
