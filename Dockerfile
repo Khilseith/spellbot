@@ -7,7 +7,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENV TOKEN=$TOKEN
-
 CMD ["python", "./src/main.py"]
 
