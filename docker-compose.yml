@@ -20,8 +20,6 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
     expose:
       - 2333
-    ports:
-      - "2333:2333"
     environment:
       - SERVER_PORT=2333
       - SERVER_ADDRESS=0.0.0.0
