@@ -471,32 +471,25 @@ class NegateModal(ui.Modal, title="Negate the result of the die?"):
             raise Exception("Should never happen")
         self.die = die
 
-    negate = discord.ui.TextInput(
-        label="Yes or No", required=True, style=discord.TextStyle.short
+    negate = discord.ui.Label(
+        text="Yes or No",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label="Yes", value="True"),
+                discord.SelectOption(label="No", value="False"),
+            ],
+            required=True,
+        ),
     )
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
-        negate = self.negate.value.lower()
-        if negate in ("yes", "y", "true", "t", "1", "enable", "on"):
-            negate = True
-        elif negate in ("no", "n", "false", "f", "0", "disable", "off"):
-            negate = False
-        else:
-            raise ValueError()
+        assert isinstance(self.negate.component, discord.ui.Select)
+        negate = bool(self.negate.component.values[0])
 
         dieLabel = f"{self.die.amount}d{self.die.sides}"
 
         self.view.dice[dieLabel].negate = negate
         await interaction.response.defer()
-
-    async def on_error(
-        self, interaction: discord.Interaction, error: Exception
-    ) -> None:
-        if isinstance(error, ValueError):
-            await interaction.response.send_message(
-                "Your answer must be in the form of a yes/no or a true/false",
-                ephemeral=True,
-            )
 
 
 class ModifierModal(ui.Modal, title="Set the modifier of the die"):
@@ -542,11 +535,15 @@ class KeepModal(ui.Modal, title="What dice to keep"):
             raise Exception("Should never happen")
         self.die = die
 
-    selector = discord.ui.TextInput(
-        label="Selector",
-        required=False,
-        style=discord.TextStyle.short,
-        placeholder="lowest | highest | exact | greater | less",
+    selector = discord.ui.Label(
+        text="Selector",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label=i.title(), value=i)
+                for i in ("lowest", "highest", "exact", "greater", "less")
+            ],
+            required=True,
+        ),
     )
 
     number = discord.ui.TextInput(
@@ -555,19 +552,22 @@ class KeepModal(ui.Modal, title="What dice to keep"):
         style=discord.TextStyle.short,
         min_length=1,
         max_length=3,
-        placeholder="Number for the selector (3 with highest for slector would keep highest 3)",
+        placeholder="Number for the selector (e.g. keep highest 3)",
     )
 
-    dropKeep = discord.ui.TextInput(
-        label="Drop Or Keep",
-        required=False,
-        style=discord.TextStyle.short,
-        placeholder="drop | keep",
+    dropKeep = discord.ui.Label(
+        text="Drop or Keep",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label=i.title(), value=i) for i in ("drop", "keep")
+            ],
+            required=True,
+        ),
     )
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         try:
-            selector = Selectors(self.selector.value.lower())
+            selector = Selectors(self.selector.component.values[0].lower())
         except ValueError:
             await interaction.response.send_message(
                 f"{self.selector.value} is not one of the options for `Selectors`",
@@ -575,7 +575,7 @@ class KeepModal(ui.Modal, title="What dice to keep"):
             )
             return
         try:
-            dropKeep = DropOrKeep(self.dropKeep.value.lower())
+            dropKeep = DropOrKeep(self.dropKeep.component.values[0].lower())
         except ValueError:
             await interaction.response.send_message(
                 f"{self.dropKeep.value} is not one of the options for `Drop Or Keep`",
@@ -613,11 +613,15 @@ class RerollModal(ui.Modal, title="What to ReRoll on"):
             raise Exception("Should never happen")
         self.die = die
 
-    selector = discord.ui.TextInput(
-        label="Selector",
-        required=False,
-        style=discord.TextStyle.short,
-        placeholder="lowest | highest | exact | greater | less",
+    selector = discord.ui.Label(
+        text="What to reroll",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label=i.title(), value=i)
+                for i in ("lowest", "highest", "exact", "greater", "less")
+            ],
+            required=True,
+        ),
     )
 
     number = discord.ui.TextInput(
@@ -626,19 +630,27 @@ class RerollModal(ui.Modal, title="What to ReRoll on"):
         style=discord.TextStyle.short,
         min_length=1,
         max_length=3,
-        placeholder="Number for the selector (3 with highest for slector would keep highest 3)",
+        placeholder="Number for the selector (e.g. keep highest 3)",
     )
 
-    rerollOn = discord.ui.TextInput(
-        label="What to reroll on",
-        required=True,
-        style=discord.TextStyle.short,
-        placeholder="rr (Reroll untill gone) | ro (reroll once) | ra (reroll and add original)",
+    rerollOn = discord.ui.Label(
+        text="How to reroll",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label=x, value=y)
+                for (x, y) in (
+                    ("Reroll until gone", "rr"),
+                    ("Reroll once", "ro"),
+                    ("Reroll and add original", "ra"),
+                )
+            ],
+            required=True,
+        ),
     )
 
     async def on_submit(self, interaction: discord.Interaction, /) -> None:
         try:
-            selector = Selectors(self.selector.value.lower())
+            selector = Selectors(self.selector.component.values[0].lower())
         except ValueError:
             await interaction.response.send_message(
                 f"{self.selector.value} is not one of the options for `Selectors`",
@@ -646,7 +658,7 @@ class RerollModal(ui.Modal, title="What to ReRoll on"):
             )
             return
         try:
-            rerollOn = RerollOn(self.rerollOn.value.lower())
+            rerollOn = RerollOn(self.rerollOn.component.values[0].lower())
         except ValueError:
             await interaction.response.send_message(
                 f"{self.rerollOn.value} is not one of the options for `Drop Or Keep`",
@@ -679,6 +691,16 @@ class MultiplyDivideModal(ui.Modal, title="Multiply or Divide"):
             raise Exception("Should never happen")
         self.die = die
 
+    multiplyDivide = discord.ui.Label(
+        text="Multiply or Divide",
+        component=discord.ui.Select(
+            options=[
+                discord.SelectOption(label=i.title(), value=i)
+                for i in ("multiply", "divide")
+            ]
+        ),
+    )
+
     number = discord.ui.TextInput(
         label="Number",
         required=True,
@@ -687,17 +709,12 @@ class MultiplyDivideModal(ui.Modal, title="Multiply or Divide"):
         max_length=3,
     )
 
-    multiplyDivide = discord.ui.TextInput(
-        label="Multiply or Divide",
-        required=True,
-        style=discord.TextStyle.short,
-        placeholder="multiply | Divide",
-    )
-
     async def on_submit(self, interaction: discord.Interaction, /) -> None:
         number = int(self.number.value)
         try:
-            multiplyDivide = MultiplyOrDivide(self.multiplyDivide.value.lower())
+            multiplyDivide = MultiplyOrDivide(
+                self.multiplyDivide.component.values[0].lower()
+            )
         except ValueError:
             await interaction.response.send_message(
                 f"{self.multiplyDivide.value} is not one of the options for `Multiply or Divide`",
